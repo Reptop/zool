@@ -8,9 +8,13 @@ using namespace std;
 class Room{ 
 	public:
 	Room(); //contructor
-	char name[100]; 
+	char* getName();
+        char* getExit(); 
+        char* getDesc(); 
 	private:	
 	char desc[100]; 
+        char name[100]; 
+        char exit;
 
 };
 #endif

@@ -8,10 +8,13 @@ using namespace std;
 
 class Pokemon {
 	public:
-	Pokmemon(); //contructor
-	char* getName(); 
-	char* getType(); 
+	Pokemon(); //contructor
+	char* getName();
+        char* setName(); 
+	char* getType();
+        char* setType(); 
 	char* getNickname();
+        char* setNickname(); 
 	private: 	
 	char name[80];
 	char type[20]; 
