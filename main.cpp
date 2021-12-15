@@ -6,6 +6,9 @@ using namespace std;
 void catchh(vector<Room*> *owo);
 void initPoke();
 void test(vector<Room*> *owo); 
+//vector<items> 
+//I basically have to point to a class of it+ems 
+//I need to use
 //ASSOCIATE A ROOM WITH ITS OWN POSITION USING A MAP 
 
 int main() {
@@ -15,7 +18,6 @@ int main() {
     vector<Room*> rooms; 
     vector<Pokemon*> poke; 
     map <Room, int> t;   
-
 	cout << "Welcome to the world of Pokemon, where humans and pokemon live together" << endl;  
 	cout << "You currently have 150 pokemon in your pokedex, however, you are missing mewtwo" << endl;  
 	cout << "Your goal is to catch mewtwo, you will first need a master ball, so go get one and catch that pokemon!" << endl; 
@@ -39,9 +41,12 @@ int main() {
         
 	}
 	else if (strcmp(cmd, "GO") == 0) {
-	        cout << "\nWhich direction?" << endl;
+	        cout << "\nWhich direction? (NORTH, SOUTH, WEST, EAST)" << endl;
                 cin >> cmd; 
-                cin.ignore(10000, '\n'); 
+                cin.ignore(10000, '\n');
+                cin.clear(); 
+                //go(pass through direction); 
+                
 	}
         else if (strcmp(cmd, "QUIT") == 0) {
              cout << "\nSee you next time..." << endl;  
@@ -76,6 +81,7 @@ void test(vector<Room*> *owo) {
 }
 
 void initPoke() {
-  Pokemon* test = new Pokemon();
+  Pokemon *test = new Pokemon();
+  test->setName("helo");
   test->getName();
 }
