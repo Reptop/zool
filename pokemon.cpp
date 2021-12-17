@@ -6,8 +6,8 @@ Pokemon::Pokemon() {
   //this could be blank 
 }
 
-char* Pokemon::setName(char n[80]) {
-  n = name; 
+void* Pokemon::setName(char *n[80]) {
+  name = n;  
 }
 
 char* Pokemon::getName() {

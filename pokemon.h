@@ -9,7 +9,7 @@ using namespace std;
 class Pokemon {
 	public:
 	Pokemon(); //contructor
-        char* setName(char n[80]); 
+        void* setName(char *n[80]); 
         char* getName();
 	char* getType();
         char* setType(); 

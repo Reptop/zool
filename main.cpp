@@ -3,9 +3,11 @@
 #include "room.h"
 #include "pokemon.h" 
 using namespace std;
-void catchh(vector<Room*> *owo);
-void initPoke();
-void test(vector<Room*> *owo); 
+
+void listPokemon(vector<Pokemon*> *owo);
+void initPoke(vector<Pokemon*> *poke);
+void test(vector<Room*> *owo);
+
 //vector<items> 
 //I basically have to point to a class of it+ems 
 //I need to use
@@ -17,7 +19,8 @@ int main() {
     char cmd[10]; 
     vector<Room*> rooms; 
     vector<Pokemon*> poke; 
-    map <Room, int> t;   
+    map <Room, int> t;
+    initPoke(&poke);      
 	cout << "Welcome to the world of Pokemon, where humans and pokemon live together" << endl;  
 	cout << "You currently have 150 pokemon in your pokedex, however, you are missing mewtwo" << endl;  
 	cout << "Your goal is to catch mewtwo, you will first need a master ball, so go get one and catch that pokemon!" << endl; 
@@ -32,7 +35,6 @@ int main() {
         //add media 
         if (strcmp(cmd,"CATCH") == 0) {
            //catch(pass through pokemon vector) 
-            catchh(&rooms);  
         }
 	else if (strcmp(cmd, "BAG") == 0) {
           test(&rooms);  
@@ -59,8 +61,8 @@ int main() {
 
 }
 
-void catchh(vector<Room*> *owo) {
-	for (vector<Room*>::iterator iter = owo->begin(); iter != owo->end(); ++iter) {
+void listPokemon(vector<Pokemon*> *owo) {
+	for (vector<Pokemon*>::iterator iter = owo->begin(); iter != owo->end(); ++iter) {
             cout << "NAME: " << (*iter)->getName(); 
 	}
 }
@@ -80,8 +82,9 @@ void test(vector<Room*> *owo) {
   owo->push_back(hi); 
 }
 
-void initPoke() {
+void initPoke(vector<Pokemon*> *poke) {
   Pokemon *test = new Pokemon();
-  test->setName("helo");
-  test->getName();
+  char t[50] = "Hello";
+  test->setName(&t);
+  poke->push_back(test); 
 }
