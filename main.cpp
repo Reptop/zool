@@ -68,23 +68,7 @@ void listPokemon(vector<Pokemon*> *owo) {
 }
 
 void test(vector<Room*> *owo) {
-  Room *hi = new Room(); 
-  cout <<"\nDEBUG MENU" << endl;  
-  cout << "Enter Room name" << endl; 
-  cin >> hi->getName();
-  cin.clear(); 
-  cout << "Enter test description" << endl; 
-  cin >> hi->getDesc(); 
-  cin.clear();
-  cout << "Enter test exit" << endl;
-  cin >> hi->getExit(); 
-  cin.clear();
-  owo->push_back(hi); 
 }
 
 void initPoke(vector<Pokemon*> *poke) {
-  Pokemon *test = new Pokemon();
-  char t[50] = "Hello";
-  test->setName(&t);
-  poke->push_back(test); 
 }

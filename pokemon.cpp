@@ -6,18 +6,21 @@ Pokemon::Pokemon() {
   //this could be blank 
 }
 
-void* Pokemon::setName(char *n[80]) {
-  name = n;  
-}
-
+//getters and setters 
 char* Pokemon::getName() {
-  return name; 
+ return name; 
 }
 
-char* Pokemon::getType(){
- return type; 
+void Pokemon::setName(char* inputName) {
+  name = inputName; 
 }
 
-char* Pokemon::getNickname(){
-  return nickname; 
+int Pokemon::getID() {
+  return id;  
 }
+
+void Pokemon::setID(int inputID){
+ id = inputID; 
+}
+
+

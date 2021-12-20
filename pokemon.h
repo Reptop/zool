@@ -9,16 +9,13 @@ using namespace std;
 class Pokemon {
 	public:
 	Pokemon(); //contructor
-        void* setName(char *n[80]); 
+        void setName(char*); 
         char* getName();
-	char* getType();
-        char* setType(); 
-	char* getNickname();
-        char* setNickname(); 
+	void setID(int);
+        int getID(); 
 	private: 	
-	char name[80];
-	char type[20]; 
-	char nickname[100]; 
+	char* name; 
+	int id; 
 };
 #endif
 

@@ -1,21 +1,46 @@
-#include <iostream> 
-#include <cstring> 
+
+#include <iostream>
+#include <cstring>
+#include <map>
 #include "room.h"
 
 using namespace std;
 
 Room::Room() {
-  //I could maybe use this contructor function but idk what to use this for tbh 
+	//dont want to use this 
 }
 
-char* Room::getDesc() {
-  return desc; 
+//getters and setters for description, exits, items in room 
+char* Room::getDescription()
+{
+  return description;
 }
 
-char* Room::getExit(){
-  return &exit; 
+map<int,char*>* Room::getExits() {
+  return &exits;
 }
 
-char* Room::getName() {
-  return name; 
+int Room::getId() {
+  return id;
+}
+
+int Room::getItem() {
+  return item;
+}
+
+//setters
+void Room::setDescription(char* newDescription) {
+  description = newDescription;
+}
+
+void Room::setExits(map<int, char*> newExits) {
+  exits = newExits;
+}
+
+void Room::setId(int newId) {
+  id = newId;
+}
+
+void Room::setItem(int newItem) {
+  item = newItem;
 }
