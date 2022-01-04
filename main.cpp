@@ -1,3 +1,7 @@
+//Author: Raed Kabir 
+//Date: December 17th, 2021 
+//This is ZUUL or as I say it, zool. the story is kinda like a horror game. your goal is to find a weapon to defend yourself 
+
 #include <bits/stdc++.h>
 #include <map>
 #include "room.h"
