@@ -20,7 +20,11 @@ int main() {
     vector<Room*> roomList; 
     vector<Item*> itemList; 
     vector<int> inventory;
-    int currentRoom = 1; 
+    int currentRoom = 1;
+  
+  //adding rooms and items
+  initRooms(&roomList);
+  initializeItems(&itemList);
   
 	cout << "If you're reading this, you will likely die within the next 30 minutes." << endl;  
 	cout << "You were kidnapped and are currently stranded in a random hallway in a random house" << endl;  
@@ -28,6 +32,8 @@ int main() {
         cout << "\nGood Luck, player" << endl; 
         
 	while (run) {
+        cout << endl << "You currently are ";
+        printRoom(&roomList, &itemList, currentRoom);
 	cout << "COMMANDS: DROP, GET, INVENTORY, QUIT, GO" << endl; 
         cin >> input;   
         cin.clear(); 
@@ -57,7 +63,7 @@ int main() {
             dropItem(&roomList, &itemList, &inventory, currentRoom, input);
 	}
 	else if (strcmp(input, "GO") == 0) {
-	        cout << "\nWhich direction? (NORTH, SOUTH, WEST, EAST)" << endl;
+	        cout << "\nWhich direction? (north, south, west, east)" << endl;
                 cin >> input; 
                 cin.clear();
                 cin.ignore(10000, '\n');
@@ -75,10 +81,27 @@ int main() {
         }
 	else { 
 		cout << "Invalid input, dawg" << endl;
-	}	
-    }
+	}
+      
+     for (int i = 0; i < inventory.size(); ++i){ 
+        if (inventory[i] == 4) {
+          //win condition 
+          cout << "Your katana will keep you safe. Go and slice that kidnapper up!" << endl; 
+          cout << "You win :)" << endl;
+          run = false; 
+        }
+      }
 
-}
+      for (int i = 0; i < inventory.size(); ++i){ 
+        if (inventory[i] == 2 || inventory[i] == 1) {
+          //lose condition 
+          cout << "Why would you ever need that man..." << endl; 
+          cout << "you are dead" << endl;
+          run = false; 
+        }
+      }
+    }
+  }
 
 
 void initRooms(vector<Room*> *rooms) {
@@ -94,7 +117,7 @@ void initRooms(vector<Room*> *rooms) {
 
   //make rooms:
   Room* hall  = new Room();
-  hall->setDescription((char*)("In the Pokemon Center, resting up."));
+  hall->setDescription((char*)("standing in a dark hallway, you are scared."));
   hall->setId(1);
   temp.insert(pair<int, char*> (2, east));
   temp.insert(pair<int, char*> (3, north));
@@ -124,11 +147,11 @@ void initRooms(vector<Room*> *rooms) {
   temp.clear();
   
   Room* garage = new Room();
-  garage -> setDescription((char*)("in the garage."));
+  garage -> setDescription((char*)("in the garage. wait, YOUR KIDNAPPER IS HERE. RUN!!!"));
   garage -> setId(13);
   temp.insert(pair<int, char*> (3, south));
   garage -> setExits(temp);
-  garage->setItem(3/*shield*/);
+  garage->setItem(0);
   rooms->push_back(garage);
   temp.clear();
   
@@ -140,7 +163,7 @@ void initRooms(vector<Room*> *rooms) {
   temp.insert(pair<int, char*> (8, south));
   temp.insert(pair<int, char*> (6, east));
   living -> setExits(temp);
-  living -> setItem(4/*boots*/);
+  living -> setItem(4/*katana*/);
   rooms -> push_back(living);
   temp.clear();
   
@@ -188,7 +211,7 @@ void initRooms(vector<Room*> *rooms) {
   office -> setId(9);
   temp.insert(pair<int, char*> (8, east));
   office -> setExits(temp);
-  office -> setItem(1/*laptop*/);
+  office -> setItem(1/*tennis*/);
   rooms -> push_back(office);
   temp.clear();
   
@@ -199,7 +222,7 @@ void initRooms(vector<Room*> *rooms) {
   temp.insert(pair<int, char*> (14, north));
   temp.insert(pair<int, char*> (12, east));
   master -> setExits(temp);
-  master -> setItem(2/*briefcase*/);
+  master -> setItem(2/*poke_ball*/);
   rooms -> push_back(master);
   temp.clear();
   
@@ -217,7 +240,7 @@ void initRooms(vector<Room*> *rooms) {
   balcony -> setId(12);
   temp.insert(pair<int, char*> (10, west));
   balcony -> setExits(temp);
-  balcony -> setItem(0);
+  balcony -> setItem(3 /*shield*/);
   rooms -> push_back(balcony);
   temp.clear();
   
@@ -242,6 +265,25 @@ void initRooms(vector<Room*> *rooms) {
 
 }
 
+int move(vector<Room*>* rooms, int currentRoom, char direction[]) {
+  vector<Room*>::iterator i;
+  for(i = rooms->begin(); i != rooms->end(); i++) {
+    //find current room
+    if (currentRoom == (*i)->getId()) {
+      map<int, char*> exits;
+      exits = *(*i) -> getExits();
+      //get exits
+      map<int, char*>::const_iterator m;
+      for (m = exits.begin(); m != exits.end(); ++m) {
+	if (strcmp(m -> second, direction) == 0) {
+	  //int move will be the room player is going to
+	  return m -> first;
+	}
+      }
+    }
+  }
+  return 0;
+}
 //flash light: 5, katana: 4, shield: 3 poke_ball: 2 ball: 1
 void initializeItems(vector<Item*>* items) {
   Item* sword = new Item();
