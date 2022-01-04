@@ -4,49 +4,72 @@
 #include "item.h" 
 using namespace std;
 
+//function protos
 void initRooms(vector<Room*> *rooms);
-void initializeItems(vector<Item*>* items); 
-//vector<items> 
-//I basically have to point to a class of it+ems 
-//I need to use
-//ASSOCIATE A ROOM WITH ITS OWN POSITION USING A MAP 
+void initializeItems(vector<Item*>* items);
+void printRoom(vector<Room*>* rooms, vector<Item*>* items, int currentRoom);
+void printInventory(vector<Item*>* items, vector<int> invtry);
+void getItem(vector<Room*>* rooms, vector<Item*>* items,vector<int>* invtry, int currentRoom, char name[]);
+void dropItem(vector<Room*>* rooms, vector<Item*>* items, vector<int>* invtry, int currentRoom, char name[]);
+int move(vector<Room*>* rooms, int currentRoom, char direction[]); //so we can actually move 
+
 
 int main() {
-  //variables for inputting if you want to delete or search by year
     bool run = true;
-    char cmd[10]; 
-    vector<Room*> rooms; 
-    vector<Item*> items; 
-    map <Room, int> t;
-	cout << "If you're reading this, you will likely die within the 30 minutes." << endl;  
-	cout << "You were kidnapped and are currently stranded in a random hallway" << endl;  
+    char input[60]; 
+    vector<Room*> roomList; 
+    vector<Item*> itemList; 
+    vector<int> inventory;
+    int currentRoom = 1; 
+  
+	cout << "If you're reading this, you will likely die within the next 30 minutes." << endl;  
+	cout << "You were kidnapped and are currently stranded in a random hallway in a random house" << endl;  
 	cout << "To escape death, try and find a way out before your kidnapper comes back!" << endl; 
-        cout << "\nYOUR ARE CURRENTLY IN THE POKEMON CENTER, RESTING YOUR POKEMON" << endl; 
+        cout << "\nGood Luck, player" << endl; 
         
 	while (run) {
-	cout << "\nWhat will you do?" << endl; 
-	cout << "COMMANDS: DROP, BAG, POKEMON, QUIT, GO (NORTH WEST EAST SOUTH)" << endl; 
-        cin >> cmd;   
+	cout << "COMMANDS: DROP, GET, INVENTORY, QUIT, GO" << endl; 
+        cin >> input;   
         cin.clear(); 
         cin.ignore(10000, '\n'); 
-        //add media 
-        if (strcmp(cmd,"CATCH") == 0) {
-           //catch(pass through pokemon vector) 
+        if (strcmp(input,"INVENTORY") == 0) {
+            if (inventory.size() != 0) {
+	        cout << endl << "You have: ";
+	        printInventory(&itemList, inventory);
+                } 
+                else {
+	            cout << endl << "Your inventory is empty." << endl;
+                }
         }
-	else if (strcmp(cmd, "BAG") == 0) {
+	else if (strcmp(input, "GET") == 0) {
+            //get item from that room
+            cout << "What item would you like to get: " << endl;
+            cin >> input;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            getItem(&roomList, &itemList, &inventory, currentRoom, input);
         }
-        else if (strcmp(cmd,"POKEMON") == 0) {
-        
+        else if (strcmp(input,"DROP") == 0) {
+            cout << "What would you like to drop?" << endl;
+            cin >> input;
+            cin.clear();
+            cin.ignore(10000, '\n');
+            dropItem(&roomList, &itemList, &inventory, currentRoom, input);
 	}
-	else if (strcmp(cmd, "GO") == 0) {
+	else if (strcmp(input, "GO") == 0) {
 	        cout << "\nWhich direction? (NORTH, SOUTH, WEST, EAST)" << endl;
-                cin >> cmd; 
+                cin >> input; 
+                cin.clear();
                 cin.ignore(10000, '\n');
-                cin.clear(); 
-                //go(pass through direction); 
+            if (move(&roomList, currentRoom, input) == 0) {
+	        cout << endl << "There is nothing in that direction" << endl;
+            } 
+              else {
+	          currentRoom = move(&roomList, currentRoom, input);
+              }
                 
 	}
-        else if (strcmp(cmd, "QUIT") == 0) {
+        else if (strcmp(input, "QUIT") == 0) {
              cout << "\nSee you next time..." << endl;  
              break;
         }
@@ -161,7 +184,7 @@ void initRooms(vector<Room*> *rooms) {
   temp.clear();
   
   Room* office = new Room();
-  office -> setDescription((char*)("in your office. No time to work."));
+  office -> setDescription((char*)("in an office. No time to work."));
   office -> setId(9);
   temp.insert(pair<int, char*> (8, east));
   office -> setExits(temp);
@@ -190,7 +213,7 @@ void initRooms(vector<Room*> *rooms) {
   temp.clear();
   
   Room* balcony = new Room();
-  balcony -> setDescription((char*)("on the balcony. You can see the spaceship!"));
+  balcony -> setDescription((char*)("on the balcony. You hate the view"));
   balcony -> setId(12);
   temp.insert(pair<int, char*> (10, west));
   balcony -> setExits(temp);
@@ -199,7 +222,7 @@ void initRooms(vector<Room*> *rooms) {
   temp.clear();
   
   Room* outside = new Room();
-  outside -> setDescription((char*)("in the outside garden. No exit, but there is a lovely garden"));
+  outside -> setDescription((char*)("in the outside garden. No exit, but who knew my kidnapper is a great gardener"));
   outside -> setId(11);
   temp.insert(pair<int, char*> (8, north));
   temp.insert(pair<int, char*> (15, east));
@@ -292,6 +315,44 @@ void printInventory(vector<Item*>* items, vector<int> inventory) {
     }
   }
   cout << endl;
+}
+
+void dropItem(vector<Room*>* rooms, vector<Item*>* items, vector<int>* invtry, int currentRoom, char name[]) {
+  int counter;
+  vector<Room*>::iterator r;
+  vector<Item*>::iterator i;
+  vector<int>::iterator iv;
+  for(r = rooms->begin(); r != rooms->end(); r++) { //go through rooms
+    //if in currentRoom
+    if(currentRoom == (*r) -> getId()) {
+      //if no items in the room (item limit per room: one)
+      if ((*r) -> getItem() == 0) {
+	for (i = items->begin(); i != items->end(); i++) { //go through items
+	  //if item exists 
+	  if (strcmp((*i) -> getName(), name) == 0) { 
+	    for (iv = invtry -> begin(); iv != invtry -> end(); iv++) { //go through inventory
+	      //if item is in inventory
+	      if ((*iv) == (*i) -> getId()) {
+		cout << endl << "Dropped " << (*i) -> getName() << "." << endl;
+		//set item in current room
+		(*r) -> setItem((*i) -> getId());
+		//remove item from inventory
+		iv = invtry -> erase(iv);
+		return;
+	      }
+	    }
+	  }
+	  else if (counter == items -> size() - 1) {
+	    cout << endl << "No such item in your inventory." << endl;
+	  }
+	  counter++;
+	}
+      }
+      else {
+	cout << endl << "There is an item in the room already!" << endl;
+      }
+    }
+  }
 }
 
 void getItem(vector<Room*>* rooms, vector<Item*>* items,vector<int>* invtry, int currentRoom, char name[]) {
