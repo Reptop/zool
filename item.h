@@ -1,18 +1,18 @@
-#ifndef POKEMON_H
-#define POKEMON_H 
+#ifndef ITEMS_H
+#define ITEMS_H 
 
 #include <iostream> 
 #include <cstring> 
 
 using namespace std; 
 
-class Pokemon {
+class Item {
 	public:
-	Pokemon(); //contructor
+	Item(); //contructor
         void setName(char*); 
         char* getName();
-	void setID(int);
-        int getID(); 
+	void setId(int);
+        int getId(); 
 	private: 	
 	char* name; 
 	int id; 

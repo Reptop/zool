@@ -1,25 +1,25 @@
 #include <iostream> 
 #include <cstring> 
-#include "pokemon.h" 
+#include "item.h" 
 
-Pokemon::Pokemon() {
+Item::Item() {
   //this could be blank 
 }
 
 //getters and setters 
-char* Pokemon::getName() {
+char* Item::getName() {
  return name; 
 }
 
-void Pokemon::setName(char* inputName) {
+void Item::setName(char* inputName) {
   name = inputName; 
 }
 
-int Pokemon::getID() {
+int Item::getId() {
   return id;  
 }
 
-void Pokemon::setID(int inputID){
+void Item::setId(int inputID){
  id = inputID; 
 }
 

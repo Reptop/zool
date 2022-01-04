@@ -1,11 +1,11 @@
 #include <bits/stdc++.h>
 #include <map>
 #include "room.h"
-#include "pokemon.h" 
+#include "item.h" 
 using namespace std;
 
-void listPokemon(vector<Pokemon*> *owo);
-void initRooms(vector<Room*> *rooms); 
+void initRooms(vector<Room*> *rooms);
+void initializeItems(vector<Item*>* items); 
 //vector<items> 
 //I basically have to point to a class of it+ems 
 //I need to use
@@ -16,16 +16,16 @@ int main() {
     bool run = true;
     char cmd[10]; 
     vector<Room*> rooms; 
-    vector<Pokemon*> poke; 
+    vector<Item*> items; 
     map <Room, int> t;
 	cout << "If you're reading this, you will likely die within the 30 minutes." << endl;  
-	cout << "You were kidnapped and are stranded in a random hallway" << endl;  
+	cout << "You were kidnapped and are currently stranded in a random hallway" << endl;  
 	cout << "To escape death, try and find a way out before your kidnapper comes back!" << endl; 
         cout << "\nYOUR ARE CURRENTLY IN THE POKEMON CENTER, RESTING YOUR POKEMON" << endl; 
         
 	while (run) {
 	cout << "\nWhat will you do?" << endl; 
-	cout << "COMMANDS: CATCH, BAG, POKEMON, QUIT, GO (NORTH WEST EAST SOUTH)" << endl; 
+	cout << "COMMANDS: DROP, BAG, POKEMON, QUIT, GO (NORTH WEST EAST SOUTH)" << endl; 
         cin >> cmd;   
         cin.clear(); 
         cin.ignore(10000, '\n'); 
@@ -57,11 +57,6 @@ int main() {
 
 }
 
-void listPokemon(vector<Pokemon*> *owo) {
-	for (vector<Pokemon*>::iterator iter = owo->begin(); iter != owo->end(); ++iter) {
-            cout << "NAME: " << (*iter)->getName(); 
-	}
-}
 
 void initRooms(vector<Room*> *rooms) {
 
@@ -131,7 +126,7 @@ void initRooms(vector<Room*> *rooms) {
   bath -> setId(5);
   temp.insert(pair<int, char*> (2, south));
   bath -> setExits(temp);
-  bath -> setItem(5/*tp*/);
+  bath -> setItem(5/*flashlight*/);
   rooms -> push_back(bath);
   temp.clear();
   
@@ -224,4 +219,98 @@ void initRooms(vector<Room*> *rooms) {
 
 }
 
+//flash light: 5, katana: 4, shield: 3 poke_ball: 2 ball: 1
+void initializeItems(vector<Item*>* items) {
+  Item* sword = new Item();
+  sword -> setName((char*)("katana"));
+  sword -> setId(4);
+  items -> push_back(sword);
 
+  Item* light = new Item();
+  light -> setName((char*)("flashlight"));
+  light -> setId(5);
+  items -> push_back(light);
+
+  Item* ball = new Item();
+  ball -> setName((char*)("tennis ball"));
+  ball -> setId(1);
+  items -> push_back(ball);
+
+  Item* poke_ball = new Item();
+  poke_ball  -> setName((char*)("pokeball"));
+  poke_ball  -> setId(2);
+  items -> push_back(poke_ball);
+
+  Item* ck = new Item();
+  ck -> setName((char*)("shield"));
+  ck -> setId(3);
+  items -> push_back(ck);
+}
+
+
+//print room function
+void printRoom(vector<Room*>* rooms, vector<Item*>* items, int currentRoom)
+{
+  vector<Room*>::iterator r;
+  vector<Item*>::iterator i;
+  for (r = rooms->begin(); r != rooms->end(); r++) {
+    if (currentRoom == (*r)->getId()) {
+      cout << (*r)->getDescription() << endl;
+      cout << "  Exits: ";
+      //exits
+      for (map<int, char*>::const_iterator it = (*r) -> getExits() -> begin(); it != (*r) -> getExits() -> end(); it++) {
+	//printing exits
+	cout << it -> second << " ";
+      }
+      cout << endl;
+      //do items
+      cout << "  Items in this room: ";
+      int itemCount = 0; //for "no item" message
+      for (i = items->begin(); i != items->end(); i++) {
+	if ((*r)->getItem() == (*i)->getId()) {
+	  //print spcific item
+	  cout << (*i)->getName();
+	  itemCount++;
+	}
+      }
+      if (itemCount == 0) {
+	cout << "no items in here." << endl;
+      } else {
+      cout << endl;
+      }
+    }
+  }
+}
+
+void printInventory(vector<Item*>* items, vector<int> inventory) {
+  vector<Item*>::iterator i;
+  for (i = items->begin(); i != items->end(); i++) {
+    for (int a = 0; a < inventory.size(); a++) {
+      if (inventory[a] == (*i) -> getId()) {
+	cout << (*i) -> getName() << " ";
+      }
+    }
+  }
+  cout << endl;
+}
+
+void getItem(vector<Room*>* rooms, vector<Item*>* items,vector<int>* invtry, int currentRoom, char name[]) {
+  vector<Room*>::iterator r;
+  vector<Item*>::iterator i;
+  for (r = rooms->begin(); r != rooms->end(); r++) {
+    if (currentRoom == (*r) -> getId()) {
+      for (i = items->begin(); i != items->end(); i++) {
+	//if item is in the room
+	if (((*r) -> getItem() == (*i) -> getId()) && (strcmp((*i) -> getName(), name) == 0)) {
+	  //add to inventory
+	  invtry -> push_back((*i) -> getId());
+	  //set no item in room
+	  (*r) -> setItem(0);
+	  cout << endl << "Picked up " << (*i) -> getName() << "." << endl;
+	  return;
+	}
+      }
+    } 
+  }
+  cout << "There is no such item in here." << endl;
+}
