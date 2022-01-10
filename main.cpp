@@ -301,7 +301,7 @@ void initializeItems(vector<Item*>* items) {
   items -> push_back(light);
 
   Item* ball = new Item();
-  ball -> setName((char*)("tennis ball"));
+  ball -> setName((char*)("tennis_ball"));
   ball -> setId(1);
   items -> push_back(ball);
 
