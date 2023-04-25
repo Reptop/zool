@@ -8,6 +8,8 @@
 #include "item.h" 
 using namespace std;
 
+enum AlphabeticCase {Upper, Lower};
+
 //function protos
 void initRooms(vector<Room*> *rooms);
 void initializeItems(vector<Item*>* items);
@@ -16,7 +18,7 @@ void printInventory(vector<Item*>* items, vector<int> invtry);
 void getItem(vector<Room*>* rooms, vector<Item*>* items,vector<int>* invtry, int currentRoom, char name[]);
 void dropItem(vector<Room*>* rooms, vector<Item*>* items, vector<int>* invtry, int currentRoom, char name[]);
 int move(vector<Room*>* rooms, int currentRoom, char direction[]); //so we can actually move 
-
+void getInputChangeCase(char* buf, AlphabeticCase alpha_case);
 
 int main() {
     bool run = true;
@@ -39,9 +41,7 @@ int main() {
         cout << endl << "You currently are ";
         printRoom(&roomList, &itemList, currentRoom);
 	cout << "COMMANDS: DROP, GET, INVENTORY, QUIT, GO" << endl; 
-        cin >> input;   
-        cin.clear(); 
-        cin.ignore(10000, '\n'); 
+        getInputChangeCase(input, AlphabeticCase::Upper);
         if (strcmp(input,"INVENTORY") == 0) {
             if (inventory.size() != 0) {
 	        cout << endl << "You have: ";
@@ -54,23 +54,17 @@ int main() {
 	else if (strcmp(input, "GET") == 0) {
             //get item from that room
             cout << "What item would you like to get: " << endl;
-            cin >> input;
-            cin.clear();
-            cin.ignore(10000, '\n');
+            getInputChangeCase(input, AlphabeticCase::Lower);
             getItem(&roomList, &itemList, &inventory, currentRoom, input);
         }
         else if (strcmp(input,"DROP") == 0) {
             cout << "What would you like to drop?" << endl;
-            cin >> input;
-            cin.clear();
-            cin.ignore(10000, '\n');
+            getInputChangeCase(input, AlphabeticCase::Lower);
             dropItem(&roomList, &itemList, &inventory, currentRoom, input);
 	}
 	else if (strcmp(input, "GO") == 0) {
 	        cout << "\nWhich direction? (north, south, west, east)" << endl;
-                cin >> input; 
-                cin.clear();
-                cin.ignore(10000, '\n');
+            getInputChangeCase(input, AlphabeticCase::Lower);
             if (move(&roomList, currentRoom, input) == 0) {
 	        cout << endl << "There is nothing in that direction" << endl;
             } 
@@ -420,4 +414,19 @@ void getItem(vector<Room*>* rooms, vector<Item*>* items,vector<int>* invtry, int
     } 
   }
   cout << "There is no such item in here." << endl;
+}
+
+
+// This function takes in a reference to a character array, and takes user
+// input, converting all alphabetical characters to ascii lowercase. It then
+// handles cleanup of the iostream.
+void getInputChangeCase(char* buf, AlphabeticCase alpha_case) {
+  cin >> buf;
+
+  for (int i = 0; i < strlen(buf); i++) {
+    buf[i] = alpha_case == AlphabeticCase::Upper ? toupper(buf[i]) : tolower(buf[i]);
+  }
+
+  cin.clear();
+  cin.ignore(10000, '\n');
 }
